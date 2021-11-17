@@ -26,6 +26,15 @@ x　8
   group by gender
   having max(score);
 
+◯
+  select s.gender, max(er.score) as "最高得点"
+  from exam_results er
+  join students s
+  on er.student_id = s.id
+  group by s.gender
+  ;
+
+
 A
   SELECT
       s.gender,
@@ -54,9 +63,16 @@ x  7
   group by subject
   having avg(score)
   and
-
   ;
 
+x
+select er1.*, (
+  select avg(er2.score) as "平均点"
+  from exam_results er2
+  group by subject
+  ;)
+from exam_results er1
+;
 
 A
   SELECT er1.*, (
@@ -76,6 +92,14 @@ x  5
   where not er.subject like "%理科%"
   ;
 
+x　理科が含まれない値だけ除去 != 理科が含まれない生徒
+  select distinct(s.name)
+  from students s
+  join exam_results er
+  on s.id = er.student_id
+  where not subject = "理科"
+;
+
 A1
   select name
   from students
@@ -94,3 +118,8 @@ A2
     where subject = "理科"
     and student_id = s.id
   );
+
+
+
+
+
