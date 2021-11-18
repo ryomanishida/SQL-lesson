@@ -122,4 +122,4 @@ A2
 
 
 
-
+brew services start mysql
