@@ -23,13 +23,15 @@ x 10
   from employees
   ;
 
-A
-  SELECT name, hobby1 as hobby from employees
+◯ 
+  select name, hobby1 as hobby
+  from employees
   UNION ALL
-  SELECT name, hobby2 from employees
+  select name, hobby2 as hobby
+  from employees
   UNION ALL
-  SELECT name, hobby3 from employees;
-
+  select name, hobby1 as hobby
+  from employees;
 
 
 3,名字が佐藤である社員の、趣味の数を表示せよ
@@ -50,7 +52,7 @@ having name like "%佐藤%" = (
 ;
 
 A
-SELECT name, count(hobby1) + count(hobby1) +count(hobby1) AS hobby_count
+SELECT name, count(hobby1) + count(hobby2) +count(hobby3) AS hobby_count
 FROM employees
 WHERE name like "佐藤 %"
 GROUP BY name;
@@ -85,3 +87,6 @@ WHERE　hobby IS NOT NULL
 GROUP BY　hobby
 HAVING　COUNT(*) > 1
 ;
+
+
+
