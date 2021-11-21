@@ -35,6 +35,44 @@ WHERE f.followee_id IS NULL;
 
 
 3,10代、20代、30代といった年代別にフォロー数の平均を表示せよ。
+X  4
+SELECT 
+  CASE 
+    WHEN age IN ('10','11','12','13','14','15','16','17','18','19') THEN "10代"
+    WHEN age IN ('20','21','22','23','24','25','26','27','28','29') THEN "20代"
+    WHEN age IN ('30','31','32','33','34','35','36','37','38','39') THEN "30代"
+  END, avg(*) AS 平均人数
+FROM users
+GROUP BY 
+  CASE 
+    WHEN age IN ('10','11','12','13','14','15','16','17','18','19') THEN "10代"
+    WHEN age IN ('20','21','22','23','24','25','26','27','28','29') THEN "20代"
+    WHEN age IN ('30','31','32','33','34','35','36','37','38','39') THEN "30代"
+  END;
+
+A
+  SELECT
+    CONCAT(age_group * 10, '代') AS age_group,
+    AVG(count) AS avg_count
+  FROM (
+      SELECT
+          FLOOR(age / 10) AS age_group,
+          count(f.follower_id) AS count
+      FROM
+          users u
+      LEFT JOIN follows f
+          ON u.id = f.follower_id
+      GROUP BY
+          u.id
+  ) follows_count
+  GROUP BY
+      age_group
+
+-- FLOOR(数値)で小数点以下を切り捨て
+-- LEFT JOIN, RIGHT JOIN　 は値がなく、結合できない情報も優先テーブルに指定して表示する
+
 
 
 4,相互フォローしているユーザーのIDを表示せよ。なお、重複は許さないものとする。
+
+
