@@ -75,4 +75,23 @@ A
 
 4,相互フォローしているユーザーのIDを表示せよ。なお、重複は許さないものとする。
 
+X  5
+SELECT distinct(f1.followee_id) AS id1, distinct(f2.follower_id) AS id2
+FROM follows f1
+JOIN follows f2
+ON f1.follower_id = f2.followee_id
+;
+
+
+A
+SELECT 
+    f1.follower_id As id1,
+    f1.followee_id As id2
+FROM
+    follows f1
+INNER JOIN follows f2
+    ON f1.follower_id = f2.followee_id
+    AND f1.followee_id = f2.follower_id
+WHERE
+    f1.follower_id < f1.followee_id
 
