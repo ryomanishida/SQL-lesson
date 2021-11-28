@@ -94,4 +94,3 @@ INNER JOIN follows f2
     AND f1.followee_id = f2.follower_id
 WHERE
     f1.follower_id < f1.followee_id
-

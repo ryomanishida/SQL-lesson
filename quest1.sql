@@ -1,5 +1,29 @@
-理解度1~10
 
+brew services start mysql
+homebrew:について：https://qiita.com/omega999/items/6f65217b81ad3fffe7e6
+
+SQLのもつ機能
+1,中に入ったデータをあつかうもの ex)データを更新
+    DML（Data Manipulation Language)
+
+2,データを格納する器そのものをあつかうもの ex)テーブルをCREATE
+    DDL（Data Definition Language)
+
+代表的なSQL セキュリティや同時アクセスに強い弱いなど違いがあるみたいなので開発環境によって使い分ける？
+・Oracle （Oracle社）
+・SQLServer（Microsoft社）
+・MySQL（Oracle社）
+・PostgreSQL（OSS）
+
+データベースは通常一人でしか使えない？
+が、データベース管理システム(DBMS:database management system)というソフトを使うことで
+複数の利用者で大量のデータを共同利用できるようになる
+
+
+
+
+理解度 1~10
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 1,性別が男である生徒の名前を一覧で表示せよ。
 ◯　10
   select name
@@ -139,8 +163,3 @@ A2
     where subject = "理科"
     and student_id = s.id
   );
-
-
-
-
-brew services start mysql

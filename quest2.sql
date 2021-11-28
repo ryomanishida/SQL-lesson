@@ -87,6 +87,3 @@ WHERE　hobby IS NOT NULL
 GROUP BY　hobby
 HAVING　COUNT(*) > 1
 ;
-
-
-
