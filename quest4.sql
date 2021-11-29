@@ -5,11 +5,13 @@ SELECT group_name, MAX(ranking) AS 最下位, MIN(ranking) AS 1位
 FROM countries
 GROUP BY group_name;
 
+
 2,全ゴールキーパーの平均身長、平均体重を表示してください
 ◯
 SELECT AVG(height), AVG(weight)
 FROM players p
 WHERE position = 'GK';
+
 
 3,各国の平均身長を高い方から順に表示してください。ただし、FROM句はcountriesテーブルとしてください。
 X
@@ -17,7 +19,19 @@ SELECT c.name, AVG(p.height) DESC
 FROM countries c
 JOIN players p
 ON c.id = p.country_id
-GROUP BY c.name;
+GROUP BY c.name
+;
+
+X
+SELECT c.name,(
+  SELECT AVG(p.height) AS 平均身長
+  FROM players p
+  WHERE c.id = p.country_id
+  GROUP BY c.id
+  ORDER BY AVG(p.height) DESC
+  )
+FROM countries c
+;
 
 A
 SELECT c.name AS 国名, AVG(p.height) AS 平均身長
@@ -26,8 +40,10 @@ JOIN players p ON p.country_id = c.id
 GROUP BY c.id, c.name
 ORDER BY AVG(p.height) DESC
 
+
 4,各国の平均身長を高い方から順に表示してください。
 ただし、FROM句はplayersテーブルとして、テーブル結合を使わず副問合せを用いてください。
+X
 SELECT c.name AS 国名, AVG(p.height) AS 平均身長
 FROM players p
 GROUP BY p.country_id
@@ -37,6 +53,17 @@ HAVING country_id = (
   FROM countries c
 );
 
+◯
+SELECT AVG(p.height) AS 平均身長, (
+  SELECT c.name
+  FROM countries c
+  WHERE c.id = p.country_id
+  )
+FROM players p
+GROUP BY p.country_id
+ORDER BY AVG(p.height) DESC;
+
+A
 SELECT (
   SELECT c.name
   FROM countries c
@@ -46,8 +73,9 @@ FROM players p
 GROUP BY p.country_id
 ORDER BY AVG(p.height) DESC;
 
+
 5,キックオフ日時と対戦国の国名をキックオフ日時の早いものから順に表示してください。
-X 
+X
 SELECT p.kickoff, (
   SELECT c.name
   FROM countries c
@@ -72,4 +100,29 @@ LEFT JOIN countries c1 ON p.my_country_id = c1.id
 LEFT JOIN countries c2 ON p.enemy_country_id = c2.id
 ORDER BY kickoff
 
+
 6,すべての選手を対象として選手ごとの得点ランキングを表示してください（SELECT句で副問合せを使うこと）
+X
+SELECT p.name AS 選手名, (
+  SELECT count(g.player_id) AS 得点数
+  FROM goals g
+  WHERE p.id = g.player_id
+  GROUP BY g.player_id
+  ORDER BY count(g.player_id) desc
+  )
+FROM players p;
+
+A
+SELECT p.name AS 名前, p.position AS ポジション, p.club AS 所属クラブ,
+    (SELECT COUNT(id) FROM goals g WHERE g.player_id = p.id) AS ゴール数
+FROM players p
+ORDER BY ゴール数 DESC
+
+
+SELECT p.name, (
+  select count(g.id)
+  from goals g
+  where g.player_id = p.id
+) as ゴール数
+from players p
+ORDER by ゴール数 desc;
