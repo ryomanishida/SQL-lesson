@@ -1,5 +1,5 @@
 -- worldcup2014より
-1,各グループの中でFIFAランクが最も高い国と低い国のランキング番号を表示してください。
+-- 1,各グループの中でFIFAランクが最も高い国と低い国のランキング番号を表示してください。
 ◯
 SELECT group_name, MAX(ranking) AS 最下位, MIN(ranking) AS 1位
 FROM countries
@@ -13,7 +13,7 @@ FROM players p
 WHERE position = 'GK';
 
 
-3,各国の平均身長を高い方から順に表示してください。ただし、FROM句はcountriesテーブルとしてください。
+-- 3,各国の平均身長を高い方から順に表示してください。ただし、FROM句はcountriesテーブルとしてください。
 X
 SELECT c.name, AVG(p.height) DESC
 FROM countries c
@@ -41,8 +41,8 @@ GROUP BY c.id, c.name
 ORDER BY AVG(p.height) DESC
 
 
-4,各国の平均身長を高い方から順に表示してください。
-ただし、FROM句はplayersテーブルとして、テーブル結合を使わず副問合せを用いてください。
+-- 4,各国の平均身長を高い方から順に表示してください。
+-- ただし、FROM句はplayersテーブルとして、テーブル結合を使わず副問合せを用いてください。
 X
 SELECT c.name AS 国名, AVG(p.height) AS 平均身長
 FROM players p
@@ -74,7 +74,7 @@ GROUP BY p.country_id
 ORDER BY AVG(p.height) DESC;
 
 
-5,キックオフ日時と対戦国の国名をキックオフ日時の早いものから順に表示してください。
+-- 5,キックオフ日時と対戦国の国名をキックオフ日時の早いものから順に表示してください。
 X
 SELECT p.kickoff, (
   SELECT c.name
@@ -101,7 +101,7 @@ LEFT JOIN countries c2 ON p.enemy_country_id = c2.id
 ORDER BY kickoff
 
 
-6,すべての選手を対象として選手ごとの得点ランキングを表示してください（SELECT句で副問合せを使うこと）
+-- 6,すべての選手を対象として選手ごとの得点ランキングを表示してください（SELECT句で副問合せを使うこと）
 X
 SELECT p.name AS 選手名, (
   SELECT count(g.player_id) AS 得点数
@@ -126,3 +126,54 @@ SELECT p.name, (
 ) as ゴール数
 from players p
 ORDER by ゴール数 desc;
+
+-- 7,すべての選手を対象として選手ごとの得点ランキングを表示してください。（テーブル結合を使うこと）
+◯
+SELECT p.name AS 選手名, p.position AS ポジション, count(g.id) AS ゴール数
+FROM players p
+LEFT JOIN goals g
+ON p.id = g.player_id
+GROUP BY p.id
+ORDER by ゴール数 DESC
+;
+
+グループ関数を使っている場合には、SELECT句に書いているカラムはすべてGROUP BY句に記述しなければいけないとうルールあり
+
+SELECT p.name AS 名前, p.position AS ポジション, p.club AS 所属クラブ,
+    COUNT(g.id) AS ゴール数
+FROM players p
+LEFT JOIN goals g ON g.player_id = p.id
+GROUP BY p.id, p.name, p.position, p.club
+ORDER BY ゴール数 DESC；
+
+-- 8,各ポジションごとの総得点を表示してください。
+◯
+SELECT p.position AS ポジション, count(g.id) AS ゴール数
+FROM players p
+LEFT JOIN goals g
+ON p.id = g.player_id
+GROUP BY p.position
+;
+
+-- 9,ワールドカップ開催当時（2014-06-13）の年齢をプレイヤー毎に表示する。
+X
+SELECT birth, 2021-11-30 - birth, name
+FROM players
+;
+
+A
+SELECT birth, TIMESTAMPDIFF(YEAR, birth, '2021-11-30') AS age, name, position
+FROM players
+ORDER BY age DESC;
+
+-- 10,オウンゴールの回数を表示する
+X
+SELECT count()
+FROM goals
+WHERE player_id =
+;
+
+A
+SELECT COUNT(g.goal_time)
+FROM goals g
+WHERE g.player_id IS NULL;
