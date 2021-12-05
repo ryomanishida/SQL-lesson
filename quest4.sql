@@ -177,3 +177,52 @@ A
 SELECT COUNT(g.goal_time)
 FROM goals g
 WHERE g.player_id IS NULL;
+
+-- 11,各グループごとの総得点数を表示して下さい。
+-- SELECT c.group_name, COUNT(g.id)
+select c.group_name, count(g.id)
+FROM goals g
+JOIN pairings p
+ON g.pairing_id = p.id
+JOIN countries c
+ON p.my_country_id = c.id
+GROUP BY c.group_name
+;
+
+SELECT c.group_name, COUNT(g.id)
+FROM goals g
+LEFT JOIN pairings p
+ON p.id = g.pairing_id
+LEFT JOIN countries c
+ON p.my_country_id = c.id
+WHERE p.kickoff BETWEEN '2014-06-13 0:00:00' AND '2014-06-27 23:59:59'
+GROUP BY c.group_name
+;
+
+-- BETWEEN >>> ~の間に
+BETWEEN [最小値] AND [最大値]
+
+12,日本VSコロンビア戦（pairings.id = 103）でのコロンビアの得点のゴール時間を表示してください
+◯
+SELECT goal_time
+FROM goals g
+WHERE pairing_id = 103
+;
+
+13,日本VSコロンビア戦の勝敗を表示して下さい。
+X
+SELECT count(g.id)
+FROM goals g
+WHERE pairing_id = 103
+;
+SELECT count(g.id)
+FROM goals g
+WHERE pairing_id = 39
+;
+
+SELECT c.name, COUNT(g.goal_time)
+FROM goals g
+LEFT JOIN pairings p ON p.id = g.pairing_id
+LEFT JOIN countries c ON p.my_country_id = c.id 
+WHERE p.id = 103 OR p.id = 39
+GROUP BY c.name
