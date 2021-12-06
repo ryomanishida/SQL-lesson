@@ -33,6 +33,14 @@ SELECT c.name,(
 FROM countries c
 ;
 
+◯
+SELECT c.name,avg(p.height)
+FROM countries c
+JOIN players p ON c.id = p.country_id
+GROUP BY c.id
+ORDER BY avg(p.height) desc
+;
+
 A
 SELECT c.name AS 国名, AVG(p.height) AS 平均身長
 FROM countries c
@@ -112,9 +120,22 @@ SELECT p.name AS 選手名, (
   )
 FROM players p;
 
+◯
+SELECT p.name as 選手,(
+  select count(g.id)
+  from goals g
+  where g.player_id = p.id
+) as ゴール数
+from players p
+ORDER by ゴール数 desc
+;
+
 A
-SELECT p.name AS 名前, p.position AS ポジション, p.club AS 所属クラブ,
-    (SELECT COUNT(id) FROM goals g WHERE g.player_id = p.id) AS ゴール数
+SELECT p.name AS 名前, p.position AS ポジション, p.club AS 所属クラブ,(
+  SELECT COUNT(id)
+  FROM goals g
+  WHERE g.player_id = p.id
+  ) AS ゴール数
 FROM players p
 ORDER BY ゴール数 DESC
 
@@ -226,3 +247,16 @@ LEFT JOIN pairings p ON p.id = g.pairing_id
 LEFT JOIN countries c ON p.my_country_id = c.id 
 WHERE p.id = 103 OR p.id = 39
 GROUP BY c.name
+
+-- 14,グループCの各対戦毎にゴール数を表示してください。
+
+SELECT p1.kickoff, c1.name AS my_country, c2.name AS enemy_country,
+    c1.ranking AS my_ranking, c2.ranking AS enemy_ranking,
+    COUNT(g1.id) AS my_goals
+FROM pairings p1
+LEFT JOIN countries c1 ON c1.id = p1.my_country_id
+LEFT JOIN countries c2 ON c2.id = p1.enemy_country_id
+LEFT JOIN goals g1 ON p1.id = g1.pairing_id
+WHERE c1.group_name = 'C' AND c2.group_name = 'C'
+GROUP BY p1.kickoff, c1.name, c2.name, c1.ranking, c2.ranking
+ORDER BY p1.kickoff, c1.ranking
