@@ -8,6 +8,7 @@ WHERE followee_id = (
   WHERE name = "さくら"
 );
 
+A
 SELECT u2.name
 FROM users u1
 JOIN follows f

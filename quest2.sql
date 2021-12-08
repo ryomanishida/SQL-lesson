@@ -23,7 +23,7 @@ x 10
   from employees
   ;
 
-◯ 
+◯
   select name, hobby1 as hobby
   from employees
   UNION ALL
