@@ -1,4 +1,5 @@
 brew services start mysql
+mysqlログイン mysql -u root -p
 homebrew:について：https://qiita.com/omega999/items/6f65217b81ad3fffe7e6
 
 SQLのもつ機能

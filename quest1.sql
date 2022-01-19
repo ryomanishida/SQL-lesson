@@ -1,3 +1,4 @@
+-- https://qiita.com/_hiro_dev/items/ece39759879c5d1f8536
 理解度 1~10
 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 1,性別が男である生徒の名前を一覧で表示せよ。
@@ -25,6 +26,12 @@ x　8
   on s.id = er.student_id
   group by gender
   having max(score);
+
+  select s.gender, max(ex.score)
+  from students s
+  inner join exam_results er
+  on s.id = er.student_id
+  group by s.gender;
 
 ◯ ◯
   select s.gender, max(er.score) as "最高得点"
